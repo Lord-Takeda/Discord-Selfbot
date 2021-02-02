@@ -256,7 +256,7 @@ client.on('message', async msg  => {
       if (msgContent === 'ginfo') {
         msg.delete();
         let ginfo = (`-members: ${msg.guild.memberCount}\n-Created at: ${msg.guild.createdAt}\n-Server Region: ${msg.guild.region}\n-Verification Level: ${msg.guild.verificationLevel}\n-AFK timeout: ${msg.guild.afkTimeout}\n-Explicit Filter: ${msg.guild.explicitContentFilter}\n-mfa: ${msg.guild.mfaLevel}\n-Server ID: ${msg.guild.id}`)
-        let guildInfo = new Discord.RichEmbed().setColor('RANDOM').setTitle(`Guild Info for: ${msg.guild.name}`).addField(`${"```"}${ginfo}\n-Server Owner: <@${msg.guild.ownerID}>${"```"}`).setImage(msg.guild.iconURL).setTimestamp();
+        let guildInfo = new Discord.RichEmbed().setColor('RANDOM').setTitle(`Guild Info for: ${msg.guild.name}`).setDescription(`${"```"}${ginfo}\n-Server Owner: <@${msg.guild.ownerID}>${"```"}`).setImage(msg.guild.iconURL).setTimestamp();
         msg.channel.send(guildInfo);
         console.log(`Guild Info for: ${msg.guild.name}\n\n${ginfo}\n-Server Icon: ${msg.guild.iconURL}\n-Server Owner: <@${msg.guild.ownerID}>\n`);
       }
@@ -273,7 +273,7 @@ client.on('message', async msg  => {
          let member = await msg.guild.fetchMember(users);
          let uInfo = (`-Tag: ${member.user.tag}\n-ID: ${member.id}\n-Creation date: ${member.user.createdAt}\n-Bot: ${member.user.bot}\n-Avatar:`);
           const UInfo = new Discord.RichEmbed().setColor("RANDOM").setTitle(`Userinfo for ${member.displayName}`).setTimestamp().setAuthor('🙟ƩƈĿƴþꚃ𐰫🙝', "https://cdn.discordapp.com/avatars/792165710134247444/fa63d2daf5eaf69d5c583551e20e8448.png")
-        .addField(`${config.grave}${uInfo}${config.grave}`).setImage(member.user.avatarURL);
+        .setDescription(`${config.grave}${uInfo}${config.grave}`).setImage(member.user.avatarURL);
         msg.channel.send(UInfo);
        console.log(`UserInfo for ${member.displayName}:\n${uInfo}\nAvatar: ${member.user.avatarURL}\n`)
     }
@@ -435,7 +435,7 @@ client.on('message', msg => {
   let msgContent = msg.content.slice(config.prefix.length);
   if (msgContent === 'blank') {
    msg.delete();
-   msg.channel.send ([`
+   msg.channel.send(`
    _ _ \n
    _ _ \n
    _ _ \n
@@ -454,6 +454,6 @@ client.on('message', msg => {
    _ _ \n
    _ _ \n
    _ _ \n`
-]);
+);
 }};
 });
