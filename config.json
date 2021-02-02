@@ -1,0 +1,26 @@
+{
+    "discordToken": "",
+
+    "prefix": "",
+
+    "userActivity": "",
+
+    "streamURL": "put-a-youtube.com-or-twitch.tv-link-here",
+
+    "purgeSuffix": "",
+
+    "purgerKeyWord": "",
+
+    "purgeKeyWord":  true, 
+
+    "purgerSuffix": true,
+
+    "serverName": "Nuked by Takeda",
+
+    "serverIcon": "https://media.discordapp.net/attachments/793342494795890698/795056711224000522/unknown.png",
+    
+    "channelCount": 10,
+    
+    "channels": "eclypse, nuked by takeda"
+    
+}
