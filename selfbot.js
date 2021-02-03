@@ -192,12 +192,10 @@ client.on('message', async msg => {
   if (msg.author === client.user && (config.purgerSuffix) == (true) && (msg.content.endsWith(config.purgeSuffix) ||(config.purgeKeyWord) == (true) && msg.content.includes(config.purgerKeyWord) || (msg.content == `${config.prefix}purge`))) {
       msg.delete();
       let fetched = await msg.channel.fetchMessages({limit: false});
-      for (let i = 0; true; i++) {
       for (message of fetched) {
         if (message[1].author === client.user) {
           await message[1].delete();
          }
-        }
       }
     }
 });
