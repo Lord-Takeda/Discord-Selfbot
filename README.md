@@ -12,3 +12,6 @@ In the config.json file, you'll see two things of interest: purgerKeyWord and pu
 Same with the suffix if you end a message with it.
 However, if you do not wish to have these active: simply change the "true" in 'purgeKeyWord' or 'purgerSuffix' to 'false'.
 Also the "serverName" and "serverIcon" refer to nuked servers after using the 'nuke' command.
+
+Oh yeah also:
+Since DiscordJS is gay, when using the uinfo command you have to send the command in a guild that the person you're getting userinfo from is. *Just saying in case people get confused since it works by ID rather than mentioning*.
