@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
 const axios = require('axios');
-const fs = require('fs')
-require('events').EventEmitter.defaultMaxListeners = (21);
+const fs = require('fs');
+const embedAuthor = ('Eclypse');
 
 console.clear();
 console.log(`logging in...`);
@@ -21,7 +21,7 @@ client.login (config.discordToken);
       }
     })
   console.log(`
-\x1b[40m\x1b[32m\____________________________________________________________________________________________
+\x1b[40m\x1b[32m\____________________________________________________________________________
 ╭━━━╮╱╱╭╮
 ┃╭━━╯╱╱┃┃
 ┃╰━━┳━━┫┃╭╮╱╭┳━━┳━━┳━━╮
@@ -31,25 +31,50 @@ client.login (config.discordToken);
 ╱╱╱╱╱╱╱╱╱╭━╯┃┃┃
 ╱╱╱╱╱╱╱╱╱╰━━╯╰╯
 By Takeda
-____________________________________________________________________________________________
+____________________________________________________________________________
 \x1b[32m`);
 });
 
-//Help.
-client.on('message', msg => { 
+client.on('message', async msg => { 
   if (msg.author === client.user && msg.content.startsWith(config.prefix)){
   let msgContent = msg.content.slice(config.prefix.length);
   if (msgContent === 'help') {
-    msg.delete();
-    msg.channel.send("```                                         🙟ECLYPSE🙝 \n                                         By: Takeda \n --------------------------------------------------------------------------------------- \n COMMANDS: \n Utility Commands: \n \n help: Sends this message.\n \n blank: buries the chat with blank text. \n \n purge: Deletes your messages in the Textchannel/DM/GC you send it in. \n \n ginfo: Grabs info about the guild you send it in.\n Invinfo (invite code): Displays guild info for the an invite link\n checkip (IP Address): Displays IP info for an IP address.\n tokeninfo (token): Displays login info for a token\n\nlogs: logs messages in a the channel you send it in.\n \n RAID COMMANDS: \n \n spam (message): spams what you place after the command. \n \n gspam (message): spams what you place after the command and deletes it at the same time. \n \n rspam: Spam pings all roles. \n \n grspam: ghost spam pings all roles \n \n massban: Bans everyone with a role under yours in the server you send it in (Perms required*) \n \n nuke: Nukes a server (Deletes channels, emotes, roles, spams channels *Perms required*). \n \n MISC COMMANDS: \n \n massreact (emoji): Reacts to every message in the channel you send it in. \n \n msgedit (edit-to): Edits your messages in the channel you send the command in. \n \n pspam: spam pins messages sent in a channel/GC/DM (perms required*)\n                              ---------------------------------------------------------------------------------------------  ```");
+   await msg.delete();
+    let help = new Discord.RichEmbed()
+    .setColor('RANDOM')
+    .setTitle('Eclypse help')
+    .setAuthor(embedAuthor)
+    .setDescription(`
+${"```"}🙟ECLYPSE🙝
+By Takeda
+COMMANDS:
+\nUtility Commands:\n
+help: Sends this message.
+blank: buries the chat with blank text.
+purge: Deletes your messages in the Textchannel/DM/GC you send it in.
+ginfo: Grabs info about the guild you send it in.
+Invinfo (invite code): Displays guild info for the an invite link
+checkip (IP Address): Displays IP info for an IP address.
+tokeninfo (token): Displays login info for a token
+logs: logs messages in a the channel you send it in.
+\nRAID COMMANDS:\n
+spam (message): spams a message.
+gspam (message): ghost spams a message.
+rspam: Spam pings all roles.
+grspam: ghost spam pings all roles.
+massban: Bans everyone with a role under yours in the server you send it in (Perms required*)
+nuke: Nukes a server (Deletes channels, emotes, roles, spams channels *Perms required*).
+\nMISC COMMANDS:\n
+massreact (emoji): Reacts to every message in the channel you send it in.
+msgedit (edit-to): Edits your messages in the channel you send the command in.
+pspam: spam pins messages sent in a channel/GC/DM (perms required*)
+${"```"}
+`)
+    .setTimestamp()
+    .setFooter('Eclypse by Takeda');
+    msg.channel.send(help);
   }
-}
-});
-
-//spam
-client.on('message', async msg => { 
-  let msgContent = msg.content.slice(config.prefix.length);
-  if (msg.author === client.user && msgContent.startsWith(`spam`)) {
+  else if (msgContent.startsWith('spam')){
    let MSGContent = msgContent.slice (`spam`.length);
    let msgCount = 0;
     msg.delete();
@@ -58,33 +83,23 @@ client.on('message', async msg => {
         msgCount++;
         if (msgCount % 10 === 0) { console.log(`Sent ${msgCount} messages!`); }
      }
-   }
-});
-
-//Ghost spam.
-client.on('message', async msg => { 
-  let msgContent = msg.content.slice(config.prefix.length);
-  if (msg.author === client.user && msgContent.startsWith(`gspam`)) {
+  }
+  else if (msgContent.startsWith('gspam')){
     let msgCount = 0;
     let MSGContent = msgContent.slice(`gspam`.length);
     msg.delete();
     while (true) {
-      await sleep(0.1);
-      msg.channel.send(MSGContent).then(botMsg => {
-        botMsg.delete(0.1);
+      try{
+      await msg.channel.send(MSGContent).then(async botMsg => {
+        await botMsg.delete();
         msgCount++;
         if (msgCount % 10 === 0) { console.log(`Sent ${msgCount} messages!`); }
-      }).catch(err => console.log(err));
+      });
+     }catch(error){}
     }
   }
-});
-
-//rspam
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-     let msgContent = msg.content.slice(config.prefix.length);
-      if (msgContent === 'rspam') {
-        let msgCount = 0;
+  else if (msgContent === 'rspam'){
+    let msgCount = 0;
         msg.delete();
         let nigspam = '@everyone';
         for (role of msg.guild.roles) {
@@ -97,39 +112,24 @@ client.on('message', async msg => {
             msgCount++;
           if (msgCount % 10 === 0) { console.log(`Sent ${msgCount} messages!`); }
         }
-     } 
-   }
-});
-
-//grspam
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-     let msgContent = msg.content.slice(config.prefix.length);
-      if (msgContent === 'grspam') {
-        let msgCount = 0;
-        msg.delete();
-        let nigspam = '@everyone';
-        for (role of msg.guild.roles) {
-          if (role[0] === '@everyone') { continue }
-          nigspam += `\n<@&${role[0]}>`;
-        };
-        while (true) {
-          await sleep(0.1);
-           msg.channel.send(nigspam).then(botMsg => {
-            botMsg.delete(0.1);
-            msgCount++;
-            if (msgCount % 10 === 0) { console.log(`Sent ${msgCount} messages!`); }
-          }).catch(err => console.log(err));
-        }
-     } 
-   }
-});
-
-//Nuke
-client.on('message', async (msg) => { 
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-  let msgContent = msg.content.slice(config.prefix.length);
-  if (msgContent === 'nuke') {
+  }
+  else if (msgContent === 'grspam'){
+    let msgCount = 0;
+    msg.delete();
+    let nigspam = '@everyone';
+    for (role of msg.guild.roles) {
+      if (role[0] === '@everyone') { continue }
+      nigspam += `\n<@&${role[0]}>`;
+    };
+    while (true) {
+      await msg.channel.send(nigspam).then(async botMsg => {
+       await botMsg.delete();
+        msgCount++;
+        if (msgCount % 10 === 0) { console.log(`Sent ${msgCount} messages!`); }
+      }).catch(err => console.log(err));
+    }
+  }
+  else if (msgContent === 'nuke'){
     await msg.delete();
     try{
     if (msg.guild.me.hasPermission(['MANAGE_CHANNELS'])){
@@ -148,7 +148,8 @@ client.on('message', async (msg) => {
      }
       msg.guild.setIcon(config.serverIcon);
        msg.guild.setName(config.serverName);
-       if(msg.guild.verificationLevel !== 4){
+       massban();
+       if (msg.guild.verificationLevel != 4){
         msg.guild.setVerificationLevel(4);
         }
         for (let i = 0, l = config.channelCount, channelNames = config.channels.split(','); i < l; i++) {
@@ -163,17 +164,14 @@ client.on('message', async (msg) => {
     }
    }
   }catch(error){};
- }
+  }
+  else if (msgContent === 'massban'){
+   await msg.delete();
+    massban();
+  }
 }
-});
-
-//Massban
-client.on('message', async msg => { 
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-  let msgContent = msg.content.slice(config.prefix.length);
-  if (msgContent === 'massban') {
-    msg.delete();
-    console.log(`\x1b[32mMassbanning members of \x1b[31m${msg.guild.name}...`);
+function massban(){
+  console.log(`\x1b[32mMassbanning members of \x1b[31m${msg.guild.name}...`);
     msg.guild.members.forEach(async member =>{
       if (member.bannable === (false)){
         console.log(`\x1b[31mFailed to ban ${member.user.tag} from \x1b[33m${member.guild.name}.\x1b[32m`);
@@ -183,13 +181,13 @@ client.on('message', async msg => {
         console.log(`\x1b[32mBanned ${member.user.tag} from \x1b[33m${member.guild.name}!\x1b[32m`);
       }
     });
-   }
-  }
+}
 });
+
 
 //Purge
 client.on('message', async msg => { 
-  if (msg.author === client.user && (config.purgerSuffix) == (true) && (msg.content.endsWith(config.purgeSuffix) ||(config.purgeKeyWord) == (true) && msg.content.includes(config.purgerKeyWord) || (msg.content == `${config.prefix}purge`))) {
+  if (msg.author === client.user && (config.purgerSuffix) == (true) && (msg.content.endsWith(config.purgeSuffix) || (config.purgeKeyWord) == (true) && msg.content.includes(config.purgerKeyWord) || (msg.content == `${config.prefix}purge`))) {
       msg.delete();
       let fetched = await msg.channel.fetchMessages({limit: false});
       for (message of fetched) {
@@ -200,174 +198,174 @@ client.on('message', async msg => {
     }
 });
 
-//msgedit
+//util commands
 client.on('message', async msg => { 
-  if ( msg.author === client.user && msg.content.startsWith (`${config.prefix}msgedit`)) {
-   let msgContent = msg.content.slice (`${config.prefix}msgedit`.length);
-    msg.delete();
+  if (msg.content.startsWith(config.prefix) && msg.author == client.user){
+  let msgContent = msg.content.slice(config.prefix.length);
+  if (msgContent.startsWith('msgedit')) {
+   let MSGContent = msg.content.slice (`${config.prefix}msgedit`.length);
     console.log(`Editing messages to "${msgContent}"`)
     let fetched = await msg.channel.fetchMessages({limit: 99});
     for (message of fetched) {
      if (message[1].author === client.user) {
-      await sleep(0.1);
-      message[1].edit(msgContent);
+      await message[1].edit(MSGContent);
     }
    }
   }
-});
-
-//massreact
-client.on('message', async msg => { 
-  if ( msg.author === client.user && msg.content.startsWith (`${config.prefix}massreact `)) {
-    let reaction = msg.content.slice (`${config.prefix}massreact `.length);
+  else if (msgContent.startsWith('massreact')){
+    let reaction = msgContent.slice (`massreact`.length).trimStart();
     await msg.delete();
     console.log(`Spam reacting "${reaction}"...`)
     let fetched = await msg.channel.fetchMessages({limit: 99});
     for (let i = 0; true; i++) {
     for (message of fetched) {
-      await sleep(0.1);
-      message[1].react(reaction);
+      await message[1].react(reaction);
      }
     }
   }
-});
-
-//pinspam
-client.on('message', async msg => { 
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-  let msgContent = msg.content.slice(config.prefix.length);
-   if (msgContent === 'pspam') {
-     msg.delete();
-     let fetched = await msg.channel.fetchMessages({limit: 50});
+  else if (msgContent === 'pspam') {
+   await msg.delete();
+    let fetched = await msg.channel.fetchMessages({limit: 50});
      for (message of fetched) {
-      await sleep(0.1);
-      message[1].pin();
-    }
+      await message[1].pin();
    }
   }
-});
-
-//GuildInfo
-client.on('message', async msg  => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-     let msgContent = msg.content.slice(config.prefix.length);
-      if (msgContent === 'ginfo') {
-        msg.delete();
-        let ginfo = (`-members: ${msg.guild.memberCount}\n-Created at: ${msg.guild.createdAt}\n-Server Region: ${msg.guild.region}\n-Verification Level: ${msg.guild.verificationLevel}\n-AFK timeout: ${msg.guild.afkTimeout}\n-Explicit Filter: ${msg.guild.explicitContentFilter}\n-mfa: ${msg.guild.mfaLevel}\n-Server ID: ${msg.guild.id}`)
-        let guildInfo = new Discord.RichEmbed().setColor('RANDOM').setTitle(`Guild Info for: ${msg.guild.name}`).setDescription(`${"```"}${ginfo}\n-Server Owner: <@${msg.guild.ownerID}>${"```"}`).setImage(msg.guild.iconURL).setTimestamp();
-        msg.channel.send(guildInfo);
-        console.log(`Guild Info for: ${msg.guild.name}\n\n${ginfo}\n-Server Icon: ${msg.guild.iconURL}\n-Server Owner: <@${msg.guild.ownerID}>\n`);
-      }
-    }
-});
-
-//UserInfo
-client.on('message', async msg  => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)){
-     let msgContent = msg.content.slice(config.prefix.length);
-      if (msgContent.startsWith('uinfo')) {
-        await msg.delete();
-        let users = msgContent.slice('uinfo'.length).trimEnd().trimStart();
+  else if (msgContent === 'ginfo'){
+    await msg.delete();
+    let ginfo = (`-members: ${msg.guild.memberCount}\n-Created at: ${msg.guild.createdAt}\n-Server Region: ${msg.guild.region}\n-Verification Level: ${msg.guild.verificationLevel}\n-AFK timeout: ${msg.guild.afkTimeout}\n-Explicit Filter: ${msg.guild.explicitContentFilter}\n-mfa: ${msg.guild.mfaLevel}\n-Server ID: ${msg.guild.id}\nIcon:`)
+    let guildEmbed = new Discord.RichEmbed()
+    .setColor('RANDOM')
+    .setTitle(`Guild Info for ${msg.guild.name}`)
+    .setAuthor(embedAuthor)
+    .setDescription(ginfo)
+    .setTimestamp()
+    .setImage(msg.guild.iconURL)
+    .setFooter('Eclypse by Takeda');
+    console.log(`Guild Info for: ${msg.guild.name}\n\n${ginfo}\n-Server Icon: ${msg.guild.iconURL}\n-Server Owner: <@${msg.guild.ownerID}>\n`);
+    msg.channel.send(guildEmbed);
+  }
+  else if (msgContent.startsWith('uinfo')){
+    await msg.delete();
+    let users = msgContent.slice('uinfo'.length).trimEnd().trimStart();
          let member = await msg.guild.fetchMember(users);
          let uInfo = (`-Tag: ${member.user.tag}\n-ID: ${member.id}\n-Creation date: ${member.user.createdAt}\n-Bot: ${member.user.bot}\n-Avatar:`);
-          const UInfo = new Discord.RichEmbed().setColor("RANDOM").setTitle(`Userinfo for ${member.displayName}`).setTimestamp().setAuthor('🙟ƩƈĿƴþꚃ𐰫🙝', "https://cdn.discordapp.com/avatars/792165710134247444/fa63d2daf5eaf69d5c583551e20e8448.png")
-        .setDescription(`${config.grave}${uInfo}${config.grave}`).setImage(member.user.avatarURL);
-        msg.channel.send(UInfo);
-       console.log(`UserInfo for ${member.displayName}:\n${uInfo}\nAvatar: ${member.user.avatarURL}\n`)
-    }
-   }
-});
-
-function formatUserInfo(info){
-  let data = info.data
-  let output = `
--Tag: ${data.username}#${data.discriminator}
--ID: ${data.id}
--Avatar:
-`
-  return output;
-}
-
-//msglogger
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-    let msgContent = msg.content.slice(config.prefix.length);
-    if (msgContent === 'logs') {
-      let messages = []
-      let authors = []
-      msg.delete();
-      let fetched = await msg.channel.fetchMessages({limit: false});
-      for (message of fetched) {
-        let content = message[1].content
-        let author = message[1].author.tag
-        if (!messages.includes(content)){
-          messages.push(content) 
-        }
-        if (!authors.includes(author)){
-          messages.push(author) 
-        }
-      }
-      fs.appendFile('logs.txt', messages.join('\n'), function(err) {
-        if (err) throw err;
-        console.log(`Logged messages`);
-      });
-    }
+         let userEmbed = new Discord.RichEmbed()
+         .setColor('RANDOM')
+         .setTitle(`Userinfo for ${member.user.username}`)
+         .setAuthor(embedAuthor)
+         .setDescription("```" + uInfo + "```")
+         .setTimestamp()
+         .setImage(member.user.avatarURL)
+         .setFooter('Eclypse by Takeda');
+    console.log(`UserInfo for ${member.displayName}:\n${uInfo}\nAvatar: ${member.user.avatarURL}\n`);
+    msg.channel.send(userEmbed);
   }
-});
-
-//IPcheck
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-    let msgContent = msg.content.slice(config.prefix.length);
-    if (msgContent.startsWith ('checkip')) {
-      msg.delete();
-      let ipAddress = (msgContent.slice('checkip '.length).trimEnd().trimStart());
+  else if (msgContent === 'logs'){
+    await msg.delete();
+    let messages = []
+    let authors = []
+    let fetched = await msg.channel.fetchMessages({limit: false});
+    for (message of fetched) {
+      let content = message[1].content
+      let author = message[1].author.tag
+      if (!messages.includes(content)){
+        messages.push(content) 
+      }
+      if (!authors.includes(author)){
+        messages.push(author) 
+      }
+    }
+    fs.appendFile('logs.txt', messages.join('\n'), function(err) {
+      if (err) throw err;
+      console.log(`Logged messages`);
+    });
+  }
+  else if (msgContent.startsWith('checkip') && msgContent.trimEnd() !== 'checkip'){
+    await msg.delete();
+    let ipAddress = (msgContent.slice('checkip '.length).trimEnd().trimStart());
        axios({
         url: `http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,isp,org,as,proxy,query`,
         method: "GET"
-      }).then(response => {
+      }).then(response =>{
         console.log(formatIpInfo(response));
-        msg.channel.send(`${"```"}${formatIpInfo(response)}${"```"}`);
-      }).catch(err => console.log(err));
-    }
-  } 
-});
-
-//InviteInfo
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-    let msgContent = msg.content.slice(config.prefix.length);
-    if (msgContent.startsWith ('invinfo')) {
-      msg.delete();
+        let ipEmbed = new Discord.RichEmbed()
+        .setColor('RANDOM')
+        .setTitle(`IP Info for ${response.data.query}`)
+        .setAuthor(embedAuthor)
+        .setDescription(formatIpInfo(response))
+        .setTimestamp()
+        .setFooter('Eclypse by Takeda');
+       msg.channel.send(ipEmbed);
+    });
+  }
+  else if (msgContent.startsWith('invinfo')){
+    await msg.delete();
       let server = (msgContent.slice('invinfo '.length).trimEnd().trimStart());
        axios({
         url: `https://discord.com/api/invites/${server}`,
         method: "GET"
       }).then(response => {
         console.log(formatInviteInfo(response));
-        msg.channel.send(`${"```"}${formatInviteInfo(response)}${"```"}`);
-      }).catch(err => console.log(err));
-    }
-  } 
-});
-
-//TokenInfo
-client.on('message', async msg => {
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-    let msgContent = msg.content.slice(config.prefix.length);
-    if (msgContent.startsWith ('tokeninfo')) {
-      msg.delete();
-      let token = (msgContent.slice('tokeninfo '.length).trimEnd().trimStart());
-       axios({
-        url: `https://discord.com/api/v8/users/@me`,
-        method: "GET",
-        headers: {'Authorization': token, 'Content-Type': 'application/json'},
-      }).then(response => {
-        console.log(`Token Info,${token}:\n${formatTokenInfo(response)}\n Avatar: https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}`);
-        msg.channel.send(`${"```"}Token Info, ${token}\n${formatTokenInfo(response)}${"```"}\n Avatar: https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}`);
-      }).catch(err => console.log(err));
-    }
-  } 
+        let invinfo = formatInviteInfo(response);
+        let inviteInfo = new Discord.RichEmbed()
+        .setColor('RANDOM')
+        .setTitle(`Guild Info for: ${response.data.guild.name}`)
+        .setAuthor(embedAuthor)
+        .setDescription("```" + invinfo + "```")
+        .setTimestamp()
+        .setFooter('Eclypse by Takeda')
+        .setImage(`https://cdn.discordapp.com/icons/${response.data.guild.id}/${response.data.guild.icon}`);
+        msg.channel.send(inviteInfo)
+      }).catch(err =>{
+        if (err.response.status == 404) { console.log(`[ERROR]: Invalid Invite`) }
+    });
+  }
+  else if (msgContent.startsWith ('tokeninfo')) {
+    msg.delete();
+    let token = (msgContent.slice('tokeninfo '.length).trimEnd().trimStart());
+     axios({
+      url: `https://discord.com/api/v8/users/@me`,
+      method: "GET",
+      headers: {'Authorization': token, 'Content-Type': 'application/json'},
+    }).then(response => {
+      let tokenEmbed = new Discord.RichEmbed()
+      .setColor('RANDOM')
+      .setTitle(`Token info for: ${token}`)
+      .setAuthor(embedAuthor)
+      .setDescription(`${"```"}Token Info, ${token}\n${formatTokenInfo(response)}\nAvatar:${"```"}`)
+      .setTimestamp()
+      .setFooter('Eclypse by Takeda')
+      .setImage(`Avatar: https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}`);
+      console.log(`Token Info,${token}:\n${formatTokenInfo(response)}\n Avatar: https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}`);
+      msg.channel.send(tokenEmbed);
+    }).catch(err =>{
+      if (err.response.status == 404) { console.log(`[ERROR]:Invalid Token`) }
+    })
+  }
+  else if (msgContent === 'blank') {
+    await msg.delete();
+     msg.channel.send(`
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+     _ _ \n
+ `)
+ }
+}
 });
 
 function formatTokenInfo(info) {
@@ -388,7 +386,6 @@ function formatInviteInfo(info) {
   let data = info.data;
   let output = `
   Guildinfo for, ${data.guild.name}:
-
   invite code: ${data.code}
   id: ${data.guild.id}
   banner: ${data.guild.banner}
@@ -421,37 +418,3 @@ function formatIpInfo(info) {
   `;
   return output;
 }
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
-
-//BlankBomb
-client.on('message', msg => { 
-  if (msg.author === client.user && msg.content.startsWith(config.prefix)) {
-  let msgContent = msg.content.slice(config.prefix.length);
-  if (msgContent === 'blank') {
-   msg.delete();
-   msg.channel.send(`
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n
-   _ _ \n`
-);
-}};
-});
