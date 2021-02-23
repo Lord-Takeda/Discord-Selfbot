@@ -21,7 +21,8 @@ client.login (config.discordToken);
       }
     })
   console.log(`
-\x1b[40m\x1b[32m\____________________________________________________________________________
+\x1b[40m\x1b[32m
+____________________________________________________________________________
 ╭━━━╮╱╱╭╮
 ┃╭━━╯╱╱┃┃
 ┃╰━━┳━━┫┃╭╮╱╭┳━━┳━━┳━━╮
@@ -31,7 +32,7 @@ client.login (config.discordToken);
 ╱╱╱╱╱╱╱╱╱╭━╯┃┃┃
 ╱╱╱╱╱╱╱╱╱╰━━╯╰╯
 By Takeda
-____________________________________________________________________________
+_____________________________________________________________________________
 \x1b[32m`);
 });
 
@@ -203,7 +204,7 @@ client.on('message', async msg => {
   if (msg.content.startsWith(config.prefix) && msg.author == client.user){
   let msgContent = msg.content.slice(config.prefix.length);
   if (msgContent.startsWith('msgedit')) {
-   let MSGContent = msg.content.slice (`${config.prefix}msgedit`.length);
+   let MSGContent = msgContent.slice(`msgedit`.length);
     console.log(`Editing messages to "${msgContent}"`)
     let fetched = await msg.channel.fetchMessages({limit: 99});
     for (message of fetched) {
@@ -217,10 +218,8 @@ client.on('message', async msg => {
     await msg.delete();
     console.log(`Spam reacting "${reaction}"...`)
     let fetched = await msg.channel.fetchMessages({limit: 99});
-    for (let i = 0; true; i++) {
     for (message of fetched) {
       await message[1].react(reaction);
-     }
     }
   }
   else if (msgContent === 'pspam') {
