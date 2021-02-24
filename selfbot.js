@@ -274,7 +274,7 @@ client.on('message', async msg => {
         messages.push(author) 
       }
     }
-    fs.appendFile('logs.txt', messages.join('\n'), function(err) {
+    fs.appendFile('logs.txt', messages.join('\n\n'), function(err) {
       if (err) throw err;
       console.log(`Logged messages`);
     });
