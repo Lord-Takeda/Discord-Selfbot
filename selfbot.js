@@ -106,7 +106,6 @@ ${"```"}
         msg.delete();
         let nigspam = '@everyone';
         for (role of msg.guild.roles) {
-          if (role[0] === '@everyone') { continue }
           nigspam += `\n<@&${role[0]}>`;
         }
         msg.channel.send(nigspam);
@@ -121,7 +120,6 @@ ${"```"}
     msg.delete();
     let nigspam = '@everyone';
     for (role of msg.guild.roles) {
-      if (role[0] === '@everyone') { continue }
       nigspam += `\n<@&${role[0]}>`;
     };
     while (true) {
