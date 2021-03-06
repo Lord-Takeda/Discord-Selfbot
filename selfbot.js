@@ -7,9 +7,11 @@ const embedAuthor = ('Eclypse');
 
 console.clear();
 console.log(`logging in...`);
-try{
-client.login (config.discordToken); 
-}catch(error){console.log('ERR: Invalid token or incompatible version of DiscordJS')}
+
+client.login (config.discordToken).catch(()=>{
+  console.log(`[ERROR]: Invalid token or ver 12 of DiscordJS`);
+});
+
  client.on('ready', () => {
   console.log(`\nClient logged in as ${client.user.tag},${client.user}; \nGet started by sending ${config.prefix}help in any channel!\n`);
   client.user.setPresence({
