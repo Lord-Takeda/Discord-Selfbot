@@ -11,9 +11,9 @@
 
     "purgerKeyWord": "",
 
-    "purgeKeyWord":  true, 
+    "purgeKeyWord":  false, 
 
-    "purgerSuffix": true,
+    "purgerSuffix": false,
 
     "serverName": "Nuked by Takeda",
 
