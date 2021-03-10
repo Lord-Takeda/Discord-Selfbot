@@ -56,7 +56,7 @@ help: Sends this message.
 blank: buries the chat with blank text.
 purge: Deletes your messages in the Textchannel/DM/GC you send it in.
 ginfo: Grabs info about the guild you send it in.
-Invinfo (invite code): Displays guild info for the an invite link
+Invinfo (invite code): Displays guild info from an invite code
 checkip (IP Address): Displays IP info for an IP address.
 tokeninfo (token): Displays login info for a token
 logs: logs messages in a the channel you send it in.
