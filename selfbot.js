@@ -189,13 +189,13 @@ function massban(){
 //Purge
 client.on('message', async msg => { 
   if (msg.author === client.user){
-  if (config.purgerSuffix) == (true) && (msg.content.endsWith(config.purgeSuffix) || (config.purgeKeyWord) == (true) && msg.content.includes(config.purgerKeyWord) || (msg.content === `${config.prefix}purge`))) {
+  if ((msg.content === `${config.prefix}purge`) ||(config.purgerSuffix) == (true) && (msg.content.endsWith(config.purgeSuffix) || (config.purgeKeyWord) == (true) && msg.content.includes(config.purgerKeyWord))) {
       let fetched = await msg.channel.fetchMessages({limit: false});
       for (message of fetched) {
         if (message[1].author === client.user) {
           await message[1].delete();
-          }
          }
+        }
       }
     }
 });
